@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "jetbrains/phpstorm-attributes": "^1.0"
+    }
+}

@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+declare(ticks = 1, strict_types = 1);
+cli_set_process_title("EchoLog");
+
+require_once __DIR__ . "/../config.php";
+require_once __DIR__ . "/../src/Autoloader.php";
+require_once __DIR__ . "/../vendor/autoload.php";
+
+$consoleLogger = new LogServer\System\Console\AnsiStyler();
+$consoleColor = LogServer\System\Console\AnsiColorCode::FOREGROUND_COLOR_CYAN;
+
+$consoleLogger->withForegroundColor($consoleColor)->withBold()
+->println("EchoLog v1.0 Simple Log Server for Network Devices");
+$consoleLogger->withForegroundColor($consoleColor)->withUnderline()
+->println("https://github.com/antibiotics11/EchoLog");
+$consoleLogger->println();
+
+unset($consoleLogger, $consoleColor);
+
+//printf("pid: %d", posix_getpid());
+(new LogServer\LogServer(
+  serverAddress:   UDP_SERVER_ADDRESS,
+  serverPort:      UDP_SERVER_PORT,
+  serverLogDir:    UDP_SERVER_LOG_DIR,
+  serverTimezone:  "GMT",
+  remoteLogConfig: REMOTE_LOG_CONFIG
+))->run();
