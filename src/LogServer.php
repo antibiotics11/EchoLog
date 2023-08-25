@@ -137,7 +137,7 @@ final class LogServer {
     $errorMessage = !strlen($errorMessage) ? "Unknown error occurred." : $errorMessage;
     $this->consoleLogger
          ->withForegroundColor(AnsiColorCode::FOREGROUND_COLOR_RED)
-         ->generate($errorMessage);
+         ->println($errorMessage);
     exit(1);
 
   }
