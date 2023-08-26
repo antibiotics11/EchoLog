@@ -81,8 +81,10 @@ final class LogServer {
       $this->terminate($e->getMessage());
     }
 
-    PosixSignalHandler::register(PosixSignal::SIGINT,  [$this, "close"]);
-    PosixSignalHandler::register(PosixSignal::SIGTERM, [$this, "close"]);
+    $signals = [PosixSignal::SIGHUP, PosixSignal::SIGINT, PosixSignal::SIGQUIT, PosixSignal::SIGTERM];
+    for ($s = 0; $s < count($signals); $s++) {
+      PosixSignalHandler::register($signals[$s],  [$this, "close"]);
+    }
 
   }
 
