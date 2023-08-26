@@ -123,6 +123,7 @@ final class LogServer {
     $this->consoleLogger->println($log);
     $this->serverLogger->write($log);
 
+    $rawMessage = mb_convert_encoding(trim($rawMessage), "UTF-8");
     try {
       if ($isConfiguredHost) {
         $message = $this->remoteLogConfig[$remoteIp]["parse"] ? Parser::parse($rawMessage) : $rawMessage;
