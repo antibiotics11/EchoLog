@@ -18,6 +18,7 @@ final class LogServer {
 
   private AnsiStyler $consoleLogger;
 
+  // Configuration array for remote log hosts.
   #[Immutable(Immutable::PRIVATE_WRITE_SCOPE)]
   #[ArrayShape([
     "address" => "LogServer\\Network\\InetAddress",
@@ -26,6 +27,7 @@ final class LogServer {
   ])]
   private Array      $remoteLogConfig;
 
+  // Initializes the server with provided settings.
   public function __construct(
       String $serverAddress, int $serverPort, String $serverLogDir, String $serverTimezone,
       #[ArrayShape(["address" => "String", "path" => "String", "parse" => "bool"])]
@@ -37,12 +39,12 @@ final class LogServer {
     $this->remoteLogConfig = [];
     foreach ($remoteLogConfig as $config) {
       if (!isset($config["address"]) || !isset($config["path"])) {
-        $this->terminate("\"address\" and \"path\" must be specified.");
+        $this->terminate("\"address\" and \"path\" not specified.");
       }
 
       $remoteAddress = InetAddress::getByInput($config["address"]);
       if ($remoteAddress === null) {
-        $this->terminate("Invalid remote address.");
+        $this->terminate(sprintf("Invalid address \"%s\".", $config["address"]));
       }
 
       $remoteLogger = null;
@@ -88,6 +90,7 @@ final class LogServer {
 
   }
 
+  // Start the server.
   public function run(): void {
 
     $log = $this->consoleLogger
@@ -104,6 +107,7 @@ final class LogServer {
 
   }
 
+  // Handle an incoming message.
   public function handle(String $rawMessage, String $remoteIp, int $remotePort): void {
 
     $isConfiguredHost = array_key_exists($remoteIp, $this->remoteLogConfig);
@@ -139,7 +143,7 @@ final class LogServer {
     $errorMessage = !strlen($errorMessage) ? "Unknown error occurred." : $errorMessage;
     $this->consoleLogger
          ->withForegroundColor(AnsiColorCode::FOREGROUND_COLOR_RED)
-         ->println($errorMessage);
+         ->println(sprintf("Error: %s", $errorMessage));
     exit(1);
 
   }
