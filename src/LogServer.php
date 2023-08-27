@@ -108,7 +108,7 @@ final class LogServer {
   }
 
   // Handle an incoming message.
-  public function handle(String $rawMessage, String $remoteIp, int $remotePort): void {
+  public function handle(String $message, String $remoteIp, int $remotePort): void {
 
     $isConfiguredHost = array_key_exists($remoteIp, $this->remoteLogConfig);
     $logColor = $isConfiguredHost ? AnsiColorCode::FOREGROUND_COLOR_CYAN : AnsiColorCode::FOREGROUND_COLOR_YELLOW;
@@ -116,24 +116,26 @@ final class LogServer {
                 ->withForegroundColor($logColor)
                 ->generate(sprintf("[%s] Received %d bytes from %s:%d.",
                   Time::dateRFC2822(),
-                  strlen($rawMessage),
+                  strlen($message),
                   $isConfiguredHost ? $remoteIp : sprintf("unknown host %s", $remoteIp),
                   $remotePort
                 ));
     $this->consoleLogger->println($log);
     $this->serverLogger->write($log);
 
-    $rawMessage = mb_convert_encoding(trim($rawMessage), "UTF-8");
+    if (!$isConfiguredHost) {
+      return;
+    }
+
+    $message = mb_convert_encoding(trim($message), "UTF-8");
     try {
-      if ($isConfiguredHost) {
-        $message = $this->remoteLogConfig[$remoteIp]["parse"] ? Parser::parse($rawMessage) : $rawMessage;
-        $this->remoteLogConfig[$remoteIp]["logger"]->write($message);
-      }
+      $message = $this->remoteLogConfig[$remoteIp]["parse"] ? Parser::parse($message) : $message;
     } catch (InvalidArgumentException) {
       $this->consoleLogger
            ->withForegroundColor(AnsiColorCode::FOREGROUND_COLOR_YELLOW)
            ->println(sprintf("[%s] Failed to parse received message.", Time::dateRFC2822()));
     }
+    $this->remoteLogConfig[$remoteIp]["logger"]->write($message);
 
   }
 
