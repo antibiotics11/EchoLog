@@ -4,6 +4,9 @@
 declare(ticks = 1, strict_types = 1);
 cli_set_process_title("EchoLog");
 
+posix_getuid() == 0 || die("Error: Must run as root.\r\n");
+(float)PHP_VERSION > 8.1 || die("Error: PHP 8.1+ required.\r\n");
+
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../src/Autoloader.php";
 require_once __DIR__ . "/../vendor/autoload.php";
@@ -12,7 +15,7 @@ $consoleLogger = new LogServer\System\Console\AnsiStyler();
 $consoleColor = LogServer\System\Console\AnsiColorCode::FOREGROUND_COLOR_CYAN;
 
 $consoleLogger->withForegroundColor($consoleColor)->withBold()
-->println("EchoLog v1.0 Simple Log Server for Network Devices");
+->println("EchoLog v1.1 Simple Log Server for Network Devices");
 $consoleLogger->withForegroundColor($consoleColor)->withUnderline()
 ->println("https://github.com/antibiotics11/EchoLog");
 $consoleLogger->println();
