@@ -1,18 +1,48 @@
 <?php
 
-const UDP_SERVER_ADDRESS  = "192.168.0.3";
-const UDP_SERVER_PORT     = 514;
-const UDP_SERVER_LOG_DIR  = "/var/log/messages/server";
+/**
+ * Address of the log server. (In IPv4 or IPv6 format)
+ * Domain name will be automatically converted to IP address.
+ */
+const UDP_SERVER_ADDRESS = "192.168.0.3";
 
-const REMOTE_LOG_CONFIG   = [
-  [  // My Home modem
+/**
+ * Port number of the log server. (Default value is 514)
+ */
+const UDP_SERVER_PORT = 514;
+
+/**
+ * Directory path where server logs are stored.
+ */
+const UDP_SERVER_LOG_DIR = "/var/log/messages/server";
+
+const REMOTE_LOG_CONFIG = [
+
+  // Configuration for My Home Modem.
+  [
+    /**
+     * Address of the remote host sending syslog messages. (In IPv4 or IPv6 format)
+     */
     "address" => "192.168.0.1",
-    "path"    => "/var/log/messages/modem",
-    "parse"   => false
+
+    /**
+     * Directory path where the syslog messages are stored.
+     */
+    "path" => "/var/log/messages/localhost",
+
+    /**
+     * Whether the log server should parse received syslog messages.
+     * Enabling this might increase CPU usage.
+     */
+    "parse" => true
+
   ],
-  [  // My brand-new ASUS Router
+
+  // Configuration for My brand-new ASUS Router.
+  [
     "address" => "192.168.0.2",
-    "path"    => "/var/log/messages/router",
-    "parse"   => true
+    "path" => "/var/log/messages/router",
+    "parse" => true
   ]
+
 ];
