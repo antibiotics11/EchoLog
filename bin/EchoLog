@@ -5,7 +5,7 @@ declare(ticks = 1, strict_types = 1);
 cli_set_process_title("EchoLog");
 
 posix_getuid() == 0 || die("Error: Must run as root.\r\n");
-(float)PHP_VERSION > 8.1 || die("Error: PHP 8.1+ required.\r\n");
+(float)PHP_VERSION >= 8.1 || die("Error: PHP 8.1+ required.\r\n");
 
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../src/Autoloader.php";
