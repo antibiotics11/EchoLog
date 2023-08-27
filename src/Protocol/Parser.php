@@ -25,13 +25,15 @@ class Parser {
     foreach (self::SYSLOG_MESSAGE_PATTERNS as $pattern) {
       if (preg_match($pattern, $message, $matches)) {
 
-        $rawMessage = array_shift($matches);
+        $rawMessage = trim(array_shift($matches));
 
         $priority = null;
         if (ctype_digit($matches[0])) {
-          $priority = (int)array_shift($matches);
+          try {
+            $priority = (int)array_shift($matches);
+            $priority = Priority::getByPriority($priority);
+          } catch (InvalidArgumentException) {}
         }
-        //print_r($matches);
 
         $isoDate  = array_shift($matches);
         $hostname = array_shift($matches);
