@@ -22,11 +22,7 @@ $consoleLogger->println();
 
 unset($consoleLogger, $consoleColor);
 
-//printf("pid: %d", posix_getpid());
 (new LogServer\LogServer(
-  serverAddress:   UDP_SERVER_ADDRESS,
-  serverPort:      UDP_SERVER_PORT,
-  serverLogDir:    UDP_SERVER_LOG_DIR,
-  serverTimezone:  "GMT",
-  remoteLogConfig: REMOTE_LOG_CONFIG
+  UDP_SERVER_ADDRESS, UDP_SERVER_PORT, UDP_SERVER_LOG_DIR, "GMT",
+  REMOTE_LOG_CONFIG
 ))->run();
