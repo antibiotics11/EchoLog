@@ -21,6 +21,10 @@ final class InetAddress {
     $this->ipAddressFamily = $ipAddressFamily;
   }
 
+  public function __toString(): String {
+    return $this->ipAddress;
+  }
+
   #[Deprecated(reason: "hostname is now marked as readonly." )]
   #[Pure]
   public function getHostname(): String {
