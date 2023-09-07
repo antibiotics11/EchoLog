@@ -61,6 +61,14 @@ final class LogServer {
              ));
       }
 
+      $config["terminal"] ??= false;
+      if ($config["terminal"] !== false) {
+        $config["terminal"] = trim($config["terminal"]);
+        if (!is_writable($config["terminal"])) {
+          $this->terminate(sprintf("Terminal %s is not writeable.", $config["terminal"]));
+        }
+      }
+
       $remoteLogger = null;
       try {
         $remoteLogger = new Logger($config["path"], 1000);
@@ -69,8 +77,9 @@ final class LogServer {
       }
 
       $this->remoteLogConfig[$remoteAddress->getIpAddress()] = [
-        "address" => $remoteAddress,
-        "logger"  => $remoteLogger,
+        "address"  => $remoteAddress,
+        "terminal" => $config["terminal"],
+        "logger"   => $remoteLogger,
         "parse"    => $config["parse"] ?? false
       ];
     }
@@ -148,6 +157,15 @@ final class LogServer {
       $this->consoleLogger
            ->withForegroundColor(AnsiColorCode::FOREGROUND_COLOR_YELLOW)
            ->println(sprintf("[%s] Failed to parse received message.", Time::dateRFC2822()));
+    }
+
+    $terminal = $this->remoteLogConfig[$remoteIp]["terminal"];
+    if ($terminal !== false) {
+      if (@file_put_contents($terminal, sprintf("%s\r\n", $message), FILE_APPEND) === false) {
+        $this->consoleLogger
+             ->withForegroundColor(AnsiColorCode::FOREGROUND_COLOR_YELLOW)
+             ->println(sprintf("[%s] Terminal %s is not responding.", Time::dateRFC2822(), $terminal));
+      }
     }
     $this->remoteLogConfig[$remoteIp]["logger"]->write($message);
 

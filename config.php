@@ -26,9 +26,14 @@ const REMOTE_LOG_CONFIG = [
     "address" => "192.168.0.1",
 
     /**
+     * Terminal to print syslog messages.
+     */
+    "terminal" => "/dev/tty",
+
+    /**
      * Directory path where the syslog messages are stored.
      */
-    "path" => "/var/log/messages/localhost",
+    "path" => "/var/log/messages/modem",
 
     /**
      * Whether the log server should parse received syslog messages.
@@ -41,7 +46,7 @@ const REMOTE_LOG_CONFIG = [
   // Configuration for My brand-new ASUS Router.
   [
     "address" => "192.168.0.2",
-    "path" => "/var/log/messages/router",
+    "path" => "/var/log/messages/router"
   ]
 
 ];
