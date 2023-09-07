@@ -71,7 +71,7 @@ final class LogServer {
       $this->remoteLogConfig[$remoteAddress->getIpAddress()] = [
         "address" => $remoteAddress,
         "logger"  => $remoteLogger,
-        "parse"   => $config["parse"] ?? true
+        "parse"    => $config["parse"] ?? false
       ];
     }
 

@@ -42,7 +42,6 @@ const REMOTE_LOG_CONFIG = [
   [
     "address" => "192.168.0.2",
     "path" => "/var/log/messages/router",
-    "parse" => true
   ]
 
 ];
