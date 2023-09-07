@@ -36,6 +36,11 @@ final class LogServer {
 
     $this->consoleLogger = new AnsiStyler();
 
+    $serverAddress = InetAddress::getByInput($serverAddress);
+    if ($serverAddress === null) {
+      $this->terminate("Invalid server address.");
+    }
+
     $this->remoteLogConfig = [];
     foreach ($remoteLogConfig as $config) {
       if (!isset($config["address"]) || !isset($config["path"])) {
@@ -45,6 +50,15 @@ final class LogServer {
       $remoteAddress = InetAddress::getByInput($config["address"]);
       if ($remoteAddress === null) {
         $this->terminate(sprintf("Invalid address \"%s\".", $config["address"]));
+      }
+
+      if ($remoteAddress->ipAddressFamily != $serverAddress->ipAddressFamily) {
+        $this->consoleLogger
+             ->withForegroundColor(AnsiColorCode::FOREGROUND_COLOR_YELLOW)
+             ->println(sprintf("Address family %s(%s) does not match server.",
+               ($remoteAddress->ipAddressFamily == AF_INET ? "AF_INET" : "AF_INET6"),
+               $remoteAddress
+             ));
       }
 
       $remoteLogger = null;
