@@ -15,7 +15,7 @@ $consoleLogger = new LogServer\System\Console\AnsiStyler();
 $consoleColor = LogServer\System\Console\AnsiColorCode::FOREGROUND_COLOR_CYAN;
 
 $consoleLogger->withForegroundColor($consoleColor)->withBold()
-->println("EchoLog v1.1 Simple Log Server for Network Devices");
+->println("EchoLog v1.2 Simple Log Server for Network Devices");
 $consoleLogger->withForegroundColor($consoleColor)->withUnderline()
 ->println("https://github.com/antibiotics11/EchoLog");
 $consoleLogger->println();
