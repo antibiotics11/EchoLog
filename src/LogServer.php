@@ -29,8 +29,7 @@ final class LogServer {
 
   // Initializes the server with provided settings.
   public function __construct(
-      String $serverAddress, int $serverPort, String $serverLogDir, String $serverTimezone,
-      #[ArrayShape(["address" => "String", "path" => "String", "parse" => "bool"])]
+      String $serverAddress, int $serverPort, String $serverLogDir, String $serverTimezone, 
       Array $remoteLogConfig
   ) {
 
